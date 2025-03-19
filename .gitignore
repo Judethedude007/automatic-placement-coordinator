@@ -1,0 +1,12 @@
+# Ignore credentials and token files
+credentials.json
+token.json
+
+# Ignore Excel files containing student data
+students.xlsx
+
+# Ignore generated report files
+selected_students_with_exams.xlsx
+
+# Ignore environment variables file
+.env
