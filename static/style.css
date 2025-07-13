@@ -1,0 +1,23 @@
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+  padding: 30px;
+  text-align: center;
+  color: #888;
+  background: #fafafa;
+}
+#drop-area.highlight {
+  border-color: #007bff;
+  background: #e6f7ff;
+}
+#drop-area input[type=file] {
+  display: none;
+}
+.browse-label {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
