@@ -7,7 +7,8 @@ body {
   display: grid;
   justify-content: center;
   align-content: center;
-  min-height: 100vh;
+   height: 100vh;
+  font: 5vh Lora;
   color: #fff;
   background-color: #121212;
 }
@@ -38,6 +39,12 @@ canvas {
   background: rgba(20, 20, 20, 0.7);
   backdrop-filter: blur(5px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Smaller styling for emails page */
+body.emails-page #drop-area {
+  max-width: 350px;
+  padding: 20px;
 }
 
 #drop-area.highlight {
@@ -81,14 +88,14 @@ button:hover {
 }
 
 a {
-  color: #66aaff;
-  text-decoration: #667799 wavy underline;
+  color: #222a;
+  text-decoration: #2224 wavy underline;
   transition: all 0.3s;
 }
 
 a:hover {
-  color: #99ccff;
-  text-shadow: 0 0 10px #336699;
+  color: #2223;
+  text-shadow: 0 0 100px #333;
 }
 
 /* Form styling */

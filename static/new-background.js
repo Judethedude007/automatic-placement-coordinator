@@ -1,10 +1,8 @@
-// Dynamic WebGL Background with dark mode and custom cursor
+// Simplified WebGL background
 document.addEventListener('DOMContentLoaded', function() {
     console.clear();
-    
-    // Create the main WebGL canvas
     const canvas = document.createElement('canvas');
-    document.body.prepend(canvas);
+    document.body.append(canvas);
     canvas.style.display = 'block';
     canvas.style.position = 'fixed';
     canvas.style.top = '0';
@@ -12,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     canvas.style.width = '100vw';
     canvas.style.height = '100vh';
     canvas.style.zIndex = '-1';
+
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
 
     // Create custom cursor elements
     const cursor = document.createElement('div');
@@ -46,28 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Track mouse position for both WebGL and cursor
     let mouseX = 0;
     let mouseY = 0;
-    
-    // Handle canvas resize
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        if (gl) {
-            gl.viewport(0, 0, canvas.width, canvas.height);
-            drawScene(); // Redraw when resized
-        }
-    }
-    
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
 
     const gl = canvas.getContext('webgl2');
     if (!gl) {
-        console.log('WebGL 2 not supported, falling back to normal background');
-        canvas.remove();
+        alert('require webgl 2.0, bye');
         return;
     }
 
-    // Vertex shader - standard pass-through
     const vss = `#version 300 es
     in vec2 p;
     void main() {
@@ -75,20 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     `;
 
-    // Fragment shader with improved colors and time-based effects
     const fss = `#version 300 es
     precision mediump float;
     out vec4 o;
     uniform vec4 c;
-    uniform float time;
-    
     void main() {
-      vec4 baseColor = vec4(0.05, 0.05, 0.15, c.a + 0.01 * sin(time * 0.001));
-      o = baseColor;
+      o = c;
     }
     `;
 
-    // Create shader program
     const vs = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vs, vss);
     gl.compileShader(vs);
@@ -119,12 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
     gl.detachShader(prg, fs);
     gl.deleteShader(fs);
 
-    // Get shader variables
     const $p = gl.getAttribLocation(prg, 'p');
     const $c = gl.getUniformLocation(prg, 'c');
-    const $time = gl.getUniformLocation(prg, 'time');
 
-    // Create vertex array
     const va = gl.createVertexArray();
     gl.bindVertexArray(va);
 
@@ -133,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let ps;
     {    
         ps = new Float32Array(2 + N * 2 * 2);
-        ps[0] = 0; // clip space center - this will be updated with cursor position
+        ps[0] = 0; // clip space center
         ps[1] = 0;
         let j = 2;
         for (let i = 0; i < N; ++i) {
@@ -175,26 +153,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //----- render setup
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0.05, 0.05, 0.1, 1);
+    gl.clearColor(0.1, 0.1, 0.1, 1);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.enable(gl.BLEND);
     gl.disable(gl.CULL_FACE);
     gl.useProgram(prg);
     gl.bindVertexArray(va);
 
-    let startTime = Date.now();
-    
-    // Draw the WebGL scene
     function drawScene() {
-        const currentTime = Date.now() - startTime;
         gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.uniform4fv($c, [0.1, 0.1, 0.2, 0.03]);
-        gl.uniform1f($time, currentTime);
+        gl.uniform4fv($c, [0.25, 0.25, 0.3, 0.03]);
         gl.drawElements(
             gl.TRIANGLES,
-            idxs.length,
-            gl.UNSIGNED_SHORT,
-            0
+            idxs.length, // n indices
+            gl.UNSIGNED_SHORT, // ui16
+            0 // skip n bytes to fetch first
         );
     }
     
@@ -238,10 +211,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Main animation loop
     function animate() {
         updateCursor();
-        drawScene();
         requestAnimationFrame(animate);
     }
     
+    // Initial draw
+    drawScene();
     animate();
 
     // Mouse interaction - update WebGL and cursor
@@ -250,10 +224,10 @@ document.addEventListener('DOMContentLoaded', function() {
         mouseX = e.clientX;
         mouseY = e.clientY;
         
-        // Update WebGL center position (normalized to clip space -1 to 1)
         ps[0] = e.clientX / window.innerWidth * 2 - 1;
         ps[1] = -1 * (e.clientY / window.innerHeight * 2 - 1);
-        gl.bufferSubData(gl.ARRAY_BUFFER, 0, ps.slice(0, 2));
+        gl.bufferSubData(gl.ARRAY_BUFFER, 0, ps.slice(0, 2)); // that's why DYNAMIC_DRAW
+        drawScene();
     });
     
     // Add hover effect to cursor when over interactive elements
@@ -283,6 +257,14 @@ document.addEventListener('DOMContentLoaded', function() {
         cursor.style.opacity = 1;
     });
     
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        drawScene();
+    });
+    
     // Handle touch events for mobile
     document.addEventListener('touchmove', (e) => {
         if (e.touches.length > 0) {
@@ -292,6 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ps[0] = mouseX / window.innerWidth * 2 - 1;
             ps[1] = -1 * (mouseY / window.innerHeight * 2 - 1);
             gl.bufferSubData(gl.ARRAY_BUFFER, 0, ps.slice(0, 2));
+            drawScene();
         }
     });
 });

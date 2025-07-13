@@ -115,14 +115,15 @@ HOME_HTML = """
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Upload Students Excel</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='simplified-style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cursor.css') }}">
 </head>
 <body>
   <div class="content">
     <h2>Step 1: Upload Students Excel File</h2>
     <div id="drop-area">
       <form method="post" enctype="multipart/form-data" action="{{ url_for('upload') }}" id="upload-form">
-        <p style="color: #fff; margin-bottom: 20px;">Drag & Drop your Excel file here<br>or</p>
+        <p>Drag & Drop your Excel file here<br>or</p>
         <label for="fileElem" class="browse-label">Browse Documents</label>
         <input type="file" id="fileElem" name="students_file" accept=".xlsx" required>
         <br><br>
@@ -139,7 +140,7 @@ HOME_HTML = """
       {% endif %}
     {% endwith %}
   </div>
-  <script src="{{ url_for('static', filename='background.js') }}"></script>
+  <script src="{{ url_for('static', filename='simplified-background.js') }}"></script>
   <script src="{{ url_for('static', filename='upload.js') }}"></script>
 </body>
 </html>
@@ -152,24 +153,25 @@ EMAILS_HTML = """
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enter Emails</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='simplified-style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cursor.css') }}">
 </head>
-<body>
+<body class="emails-page">
   <div class="content">
-    <h2>Step 2: Enter Sender and Teacher Emails</h2>
-    <div id="drop-area" style="padding: 40px 30px;">
+    <h2 style="font-size: 1.9vh; margin-bottom: 12px;">Step 2: Enter Sender and Teacher Emails</h2>
+    <div id="drop-area" style="padding: 25px 20px; max-width: 350px; margin: 0 auto;">
       <form method=post action="{{ url_for('emails') }}">
-        <label style="color: #fff; font-weight: bold;">Sender Email (Company Criteria Mail):</label><br>
-        <small style="color: #aaa;">Enter a single sender email address.</small><br>
+        <label style="color: #fff; font-weight: bold; font-size: 0.75em;">Sender Email (Company Criteria Mail):</label><br>
+        <small style="color: #ddd; font-size: 0.7em;">Enter a single sender email address.</small><br>
         <input type=text name=sender_emails required placeholder="" 
-               style="width: 100%; padding: 8px; margin: 5px 0 15px; border-radius: 4px; border: 1px solid #007bff; background: rgba(255,255,255,0.9);"><br>
+               style="width: 100%; padding: 5px; margin: 2px 0 8px; border-radius: 4px; border: 1px solid #007bff; background: rgba(30,30,35,0.7); color: white;"><br>
         
-        <label style="color: #fff; font-weight: bold;">Teacher Emails (comma-separated):</label><br>
-        <small style="color: #aaa;">Enter one or more teacher emails, separated by commas.</small><br>
+        <label style="color: #fff; font-weight: bold; font-size: 0.75em;">Teacher Emails (comma-separated):</label><br>
+        <small style="color: #ddd; font-size: 0.7em;">Enter one or more teacher emails, separated by commas.</small><br>
         <input type=text name=teacher_email required placeholder="" 
-               style="width: 100%; padding: 8px; margin: 5px 0 15px; border-radius: 4px; border: 1px solid #007bff; background: rgba(255,255,255,0.9);"><br>
+               style="width: 100%; padding: 5px; margin: 2px 0 8px; border-radius: 4px; border: 1px solid #007bff; background: rgba(30,30,35,0.7); color: white;"><br>
         
-        <button type=submit style="background-color: #007bff; color: white; border: none; border-radius: 4px; padding: 10px 20px; cursor: pointer; width: 100%;">Next</button>
+        <button type=submit style="background-color: #007bff; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; width: 100%; font-size: 0.8em;">Next</button>
       </form>
     </div>
     {% with messages = get_flashed_messages() %}
@@ -182,7 +184,7 @@ EMAILS_HTML = """
       {% endif %}
     {% endwith %}
   </div>
-  <script src="{{ url_for('static', filename='background.js') }}"></script>
+  <script src="{{ url_for('static', filename='simplified-background.js') }}"></script>
 </body>
 </html>
 """
@@ -194,15 +196,16 @@ PROCESS_HTML = """
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Process Students</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='simplified-style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cursor.css') }}">
 </head>
 <body>
   <div class="content">
     <h2>Step 3: Process Students</h2>
     <div id="drop-area" style="padding: 40px 30px; text-align: center;">
       <form method=post action="{{ url_for('process') }}">
-        <p style="color: #fff; margin-bottom: 20px;">Click the button below to analyze student data and generate reports based on the selection criteria.</p>
-        <button type=submit style="background-color: #007bff; color: white; border: none; border-radius: 4px; padding: 12px 24px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">Run Processing & Generate Report</button>
+        <p>Click the button below to analyze student data and generate reports based on the selection criteria.</p>
+        <button type=submit>Run Processing & Generate Report</button>
       </form>
     </div>
     {% with messages = get_flashed_messages() %}
@@ -215,7 +218,7 @@ PROCESS_HTML = """
       {% endif %}
     {% endwith %}
   </div>
-  <script src="{{ url_for('static', filename='background.js') }}"></script>
+  <script src="{{ url_for('static', filename='simplified-background.js') }}"></script>
 </body>
 </html>
 """
@@ -227,18 +230,19 @@ RESULT_HTML = """
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Download Report</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='simplified-style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cursor.css') }}">
 </head>
 <body>
   <div class="content">
     <h2>Step 4: Download Report</h2>
     <div id="drop-area" style="padding: 40px 30px; text-align: center;">
       {% if report_ready %}
-        <p style="color: #fff; margin-bottom: 20px;">Your report has been generated successfully! Click the button below to download.</p>
-        <a href="{{ url_for('download_report', filename=report_filename) }}" style="display: inline-block; background-color: #28a745; color: white; border: none; border-radius: 4px; padding: 12px 24px; text-decoration: none; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">Download Report</a>
+        <p>Your report has been generated successfully! Click the button below to download.</p>
+        <a href="{{ url_for('download_report', filename=report_filename) }}" style="display: inline-block; background-color: #28a745; color: white; border: none; border-radius: 4px; padding: 12px 24px; text-decoration: none;">Download Report</a>
       {% else %}
-        <p style="color: #fff;">No report was generated. Please make sure there are students matching the criteria and try again.</p>
-        <a href="{{ url_for('home') }}" style="display: inline-block; margin-top: 15px; background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 10px 20px; text-decoration: none; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">Back to Home</a>
+        <p>No report was generated. Please make sure there are students matching the criteria and try again.</p>
+        <a href="{{ url_for('home') }}" style="display: inline-block; margin-top: 15px; background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 10px 20px; text-decoration: none;">Back to Home</a>
       {% endif %}
     </div>
     {% with messages = get_flashed_messages() %}
@@ -251,7 +255,7 @@ RESULT_HTML = """
       {% endif %}
     {% endwith %}
   </div>
-  <script src="{{ url_for('static', filename='background.js') }}"></script>
+  <script src="{{ url_for('static', filename='simplified-background.js') }}"></script>
 </body>
 </html>
 """

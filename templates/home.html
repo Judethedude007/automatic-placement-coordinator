@@ -2,25 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Students Excel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='simplified-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cursor.css') }}">
 </head>
 <body>
-    <h2>Step 1: Upload Students Excel File</h2>
-    <div id="drop-area">
-      <form method="post" enctype="multipart/form-data" action="{{ url_for('upload') }}" id="upload-form">
-        <p>Drag & Drop your Excel file here<br>or</p>
-        <label for="fileElem" class="browse-label">Browse Documents</label>
-        <input type="file" id="fileElem" name="students_file" accept=".xlsx" required>
-        <br><br>
-        <button type="submit">Upload</button>
-      </form>
+    <div class="content">
+        <h2>Step 1: Upload Students Excel File</h2>
+        <div id="drop-area">
+          <form method="post" enctype="multipart/form-data" action="{{ url_for('upload') }}" id="upload-form">
+            <p>Drag & Drop your Excel file here<br>or</p>
+            <label for="fileElem" class="browse-label">Browse Documents</label>
+            <input type="file" id="fileElem" name="students_file" accept=".xlsx" required>
+            <br><br>
+            <button type="submit">Upload</button>
+          </form>
+        </div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul style="color: #fff; text-align: center; list-style-type: none; padding: 0;">
+              {% for msg in messages %}
+                <li style="background-color: rgba(30,30,30,0.7); padding: 10px; margin-bottom: 5px; border-radius: 4px; max-width: 400px; margin-left: auto; margin-right: auto;">{{ msg }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
     </div>
+    <script src="{{ url_for('static', filename='simplified-background.js') }}"></script>
     <script src="{{ url_for('static', filename='upload.js') }}"></script>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>{% for msg in messages %}<li>{{ msg }}</li>{% endfor %}</ul>
-      {% endif %}
-    {% endwith %}
 </body>
 </html>

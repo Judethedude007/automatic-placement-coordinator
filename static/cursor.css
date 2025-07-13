@@ -1,0 +1,81 @@
+/* Custom cursor styling */
+body {
+  cursor: none; /* Hide default cursor */
+}
+
+/* Show default cursor on clickable elements for better UX */
+a, button, input, select, textarea, label[for], .browse-label {
+  cursor: pointer;
+}
+
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 15px rgba(100, 180, 255, 0.9);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(100, 180, 255, 0.85);
+}
+
+/* Create cursor trail elements */
+.cursor-trail {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+  mix-blend-mode: screen;
+}
+
+/* Background cursor elements that appear behind content */
+.background-cursor {
+  position: fixed;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+  transition: width 0.3s, height 0.3s;
+}
+
+.background-cursor-pulse {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: pulse 4s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    width: 250px;
+    height: 250px;
+    opacity: 0.05;
+  }
+  100% {
+    width: 400px;
+    height: 400px;
+    opacity: 0.1;
+  }
+}
