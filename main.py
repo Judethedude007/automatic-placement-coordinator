@@ -189,10 +189,12 @@ EMAILS_HTML = """
 <title>Enter Emails</title>
 <h2>Step 2: Enter Sender and Teacher Emails</h2>
 <form method=post action="{{ url_for('emails') }}">
-  <label>Sender Emails (comma-separated):</label><br>
-  <input type=text name=sender_emails required><br><br>
-  <label>Teacher Email:</label><br>
-  <input type=text name=teacher_email required><br><br>
+  <label>Sender Email (Company Criteria Mail):</label><br>
+  <small>Enter a single sender email address.</small><br>
+  <input type=text name=sender_emails required placeholder=""><br><br>
+  <label>Teacher Emails (comma-separated):</label><br>
+  <small>Enter one or more teacher emails, separated by commas.</small><br>
+  <input type=text name=teacher_email required placeholder=""><br><br>
   <input type=submit value=Next>
 </form>
 """
