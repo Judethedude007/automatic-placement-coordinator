@@ -38,7 +38,6 @@ def fetch_company_criteria(service, sender_email):
         messages = results.get('messages', [])
 
         if not messages:
-            print("No emails found from the specified sender.")
             return []
 
         # Get the latest email
@@ -67,7 +66,7 @@ def fetch_company_criteria(service, sender_email):
         return criteria_list
 
     except HttpError as error:
-        print(f"An error occurred: {error}")
+        # Log error silently
         return []
 
 # --------------------------------
@@ -91,7 +90,6 @@ def add_company_column(students_df, sender_emails, selected_students_dict):
 
     # Save the updated Excel sheet
     students_df.to_excel("students.xlsx", index=False)
-    print(f"\n✅ Excel updated with columns for sender emails: {', '.join(sender_emails)}")
 
 # --------------------------------
 # ✅ Modified Main Execution Flow
@@ -289,13 +287,10 @@ def emails():
 @app.route("/process", methods=["GET", "POST"])
 def process():
     if request.method == "POST":
-        print("Processing started")  # Debug
         students_file = SESSION.get('students_file')
         sender_emails = SESSION.get('sender_emails')
         teacher_email = SESSION.get('teacher_email')
-        print("students_file:", students_file)  # Debug
-        print("sender_emails:", sender_emails)  # Debug
-        print("teacher_email:", teacher_email)  # Debug
+        
         if not (students_file and sender_emails and teacher_email):
             flash("Missing required information.")
             return redirect(url_for("home"))
@@ -310,14 +305,13 @@ def process():
         # Load students
         students_df = pd.read_excel(students_file)
         students_df = students_df.loc[:, ~students_df.columns.str.contains('^Unnamed')]
-        print("Loaded students_df:", students_df.shape)  # Debug
 
         selected_students_dict = {}
         for sender_email in sender_emails:
             criteria_list = fetch_company_criteria(service, sender_email)
-            print(f"Criteria for {sender_email}:", criteria_list)  # Debug
             if not criteria_list:
                 continue
+                
             selected_students = pd.DataFrame()
             for criteria in criteria_list:
                 query_parts = []
@@ -331,8 +325,8 @@ def process():
                     query = " & ".join(query_parts)
                     temp_df = students_df.query(query)
                     selected_students = pd.concat([selected_students, temp_df])
+                    
             selected_students = selected_students.drop_duplicates(subset=["student_id"])
-            print(f"Selected students for {sender_email}:", selected_students.shape)  # Debug
             if not selected_students.empty:
                 selected_students_dict[sender_email] = selected_students
 
@@ -341,23 +335,20 @@ def process():
 
         # Assign exam slots
         selected_students = pd.concat(selected_students_dict.values()) if selected_students_dict else pd.DataFrame()
-        print("Total selected students:", selected_students.shape)  # Debug
         exam_dates = [datetime.date(2025, 4, d) for d in range(1, 31)]
         exam_times = ["09:00 AM", "01:00 PM", "04:00 PM"]
+        
         if not selected_students.empty:
             selected_students["exam_date"] = [exam_dates[i % len(exam_dates)] for i in range(len(selected_students))]
             selected_students["exam_time"] = [exam_times[i % len(exam_times)] for i in range(len(selected_students))]
 
-        # Generate report
-        report_filename = "selected_students_with_exams.xlsx"
-        report_path = os.path.join(app.config['REPORT_FOLDER'], report_filename)
-        if not selected_students.empty:
+            # Generate report
+            report_filename = "selected_students_with_exams.xlsx"
+            report_path = os.path.join(app.config['REPORT_FOLDER'], report_filename)
             selected_students.to_excel(report_path, index=False)
-            print("Report saved at:", report_path)  # Debug
             SESSION['report_filename'] = report_filename
             flash("Report generated successfully.")
         else:
-            print("No students matched criteria.")  # Debug
             SESSION['report_filename'] = None
             flash("No students matched criteria; no report generated.")
 
@@ -375,5 +366,3 @@ def download_report(filename):
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
-
-print("\n🎯 Process completed successfully!")
