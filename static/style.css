@@ -1,23 +1,110 @@
+@import url('https://fonts.googleapis.com/css?family=Lora&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Lora', serif;
+  overflow-x: hidden;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  min-height: 100vh;
+  color: #fff;
+  background-color: #121212;
+}
+
+/* WebGL background will be behind this content */
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+canvas {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+}
+
 #drop-area {
-  border: 2px dashed #ccc;
+  border: 2px dashed #444;
   border-radius: 10px;
   width: 100%;
   max-width: 400px;
   margin: 0 auto 20px auto;
   padding: 30px;
   text-align: center;
-  color: #888;
-  background: #fafafa;
+  color: #fff;
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
+
 #drop-area.highlight {
   border-color: #007bff;
-  background: #e6f7ff;
+  background: rgba(15, 25, 40, 0.8);
 }
+
 #drop-area input[type=file] {
   display: none;
 }
+
 .browse-label {
   cursor: pointer;
   color: #007bff;
   text-decoration: underline;
+}
+
+h2 {
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  font-size: 3vh;
+  margin-bottom: 2rem;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Lora', serif;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+a {
+  color: #66aaff;
+  text-decoration: #667799 wavy underline;
+  transition: all 0.3s;
+}
+
+a:hover {
+  color: #99ccff;
+  text-shadow: 0 0 10px #336699;
+}
+
+/* Form styling */
+input[type=text] {
+  background-color: rgba(30, 30, 30, 0.7);
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  margin: 8px 0;
+  font-family: 'Lora', serif;
+}
+
+input[type=text]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
